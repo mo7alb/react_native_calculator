@@ -1,9 +1,9 @@
 import { useReducer } from "react";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView, StyleSheet, Text } from "react-native";
-
 import Row from "./components/Row";
 
+// initial state of the component
 const initialState = {
    result: 0,
    operator: null,
@@ -11,6 +11,13 @@ const initialState = {
    memory: 0,
 };
 
+/**
+ * A function that performs arithmetic operations based on the buttons clicked
+ * @param {Number} firstValue the first value on which the operation is to be applied
+ * @param {Number} secondValue the second value on which the operation is to be applied
+ * @param {String} operator the operand to be used in the operation
+ * @returns results obtained by the arithmetic operation
+ */
 const calculate = (firstValue, secondValue, operator) => {
    switch (operator) {
       case "+":
@@ -25,7 +32,12 @@ const calculate = (firstValue, secondValue, operator) => {
          throw Error("Invalid operation");
    }
 };
-
+/**
+ * a reducer to be used to manage the state of the component
+ * @param {Object} state the state of the application
+ * @param {Object} action different types of actions to be performed on the state
+ * @returns state after processing
+ */
 const reducer = (state, action) => {
    switch (action.type) {
       // when a number is tapped on the screen
@@ -94,25 +106,47 @@ const reducer = (state, action) => {
    }
 };
 
+/**
+ * the main component of the application
+ * contains the state of the calculator
+ * @returns JSX of a react functional component
+ */
 export default function App() {
+   // state with useReducer
    const [state, dispatch] = useReducer(reducer, initialState);
+   // destructure result from state
    const { result } = state;
 
+   /**
+    * function that handles taps on TouchableOpacity by maping
+    * different types of button taps to different dispatches
+    * @param {*} value value of the button tapped
+    */
    const onButtonPress = value => {
+      // check if a number is tapped
       if (Number.isInteger(value)) {
+         // pass the number tapped to dispatch and specify type of dispatch
          dispatch({ type: "number tapped", payload: value });
       }
+      // check if C was tapped on screen was tapped on the screen
       if (value === "C") {
          dispatch({ type: "clear" });
       }
+      // check if equal sign was tapped
       if (value === "=") {
          dispatch({ type: "equals" });
       }
+      // check if any of the arithmetic operands was tapped on
       if (value === "+" || value === "-" || value === "/" || value === "X") {
          dispatch({ type: "operator tapped", payload: value });
       }
-      if (value == "%") {
+      // check if the percentage operand was tapped on
+      if (value === "%") {
          dispatch({ type: "percentage" });
+      }
+      // check if +/- operand was tapped on
+      if (value === "+/-") {
+         dispatch({ type: "change sign" });
       }
    };
 
@@ -172,6 +206,7 @@ export default function App() {
    );
 }
 
+// styles of the application
 const styles = StyleSheet.create({
    container: {
       flex: 1,

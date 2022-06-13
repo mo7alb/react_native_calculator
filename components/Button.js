@@ -8,7 +8,9 @@ const buttonWidth = Dimensions.get("window").width / 5;
 const buttonHeight = Dimensions.get("window").height / 11;
 
 /**
- * a function component that represents a single button in the calculator
+ * A functional component that makes up a single button in the calculator
+ * @param {Object} param0 component props containing value (value of the button), color, size and onPress funtion to handle onPress
+ * @returns JSX of a react functional component
  */
 export default function Button({ value, color, size, onPress }) {
    return (
@@ -26,6 +28,7 @@ export default function Button({ value, color, size, onPress }) {
    );
 }
 
+// styles related to a button
 const styles = StyleSheet.create({
    button: {
       width: buttonWidth,

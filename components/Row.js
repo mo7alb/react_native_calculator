@@ -2,7 +2,9 @@ import { View, StyleSheet } from "react-native";
 import Button from "./Button";
 
 /**
- * a functional component that displays a single row within the calculator
+ *
+ * @param {Object} props props passed to the component - contain buttonPressed functions and an array called buttons
+ * @returns JSX of a react functional component
  */
 export default function Row({ buttonPressed, buttons }) {
    return (
@@ -20,6 +22,7 @@ export default function Row({ buttonPressed, buttons }) {
    );
 }
 
+// styles for the row component
 const styles = StyleSheet.create({
    row: {
       display: "flex",
