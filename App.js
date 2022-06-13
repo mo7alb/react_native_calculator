@@ -5,7 +5,7 @@ import Row from "./components/Row";
 
 // initial state of the component
 const initialState = {
-   result: 0,
+   result: "",
    operator: null,
    firstValue: 0,
    memory: 0,
@@ -43,26 +43,16 @@ const reducer = (state, action) => {
       // when a number is tapped on the screen
       case "number tapped":
          // check if the result and the memory states are of the same value
-         if (state.result === state.memory && state.result != 0) {
-            state = { ...state, result: 0 };
+         if (state.result === state.memory && state.result != "") {
+            state = { ...state, result: "" };
          }
-         // get the number tapped
+
+         // the number tapped on the screen
          let num = action.payload;
-         // get previous number on screen
-         let previousNum = state.result;
-
-         // if previous number is 0, return the number tapped
-         if (previousNum == 0) {
-            return { ...state, result: num };
-         }
-
-         // multiply the previos number by 10, this would
-         // add an extra 0 at the end of the previous number
-         previousNum *= 10;
 
          // add the number tapped to the previous number
          // multiplied by 10 and return the state
-         return { ...state, result: num + previousNum };
+         return { ...state, result: state.result.concat(num) };
 
       // when C is tapped on the screen
       case "clear":
@@ -72,9 +62,13 @@ const reducer = (state, action) => {
       // when = is tapped on the screen
       case "equals":
          // calculate the result of the operation
-         let result = calculate(state.firstValue, state.result, state.operator);
+         let result = calculate(
+            Number.parseFloat(state.firstValue),
+            Number.parseFloat(state.result),
+            state.operator
+         );
          // return new state
-         return { ...state, memory: result, result };
+         return { ...state, memory: result, result: result.toString() };
 
       // when an operator is tapped on the screen
       case "operator tapped":
@@ -89,17 +83,28 @@ const reducer = (state, action) => {
          let firstValue = state.result;
          // set previous result to first value and operator to the operator
          // tapped on the screen and return state
-         return { ...state, firstValue, operator, result: 0 };
+         return { ...state, firstValue, operator, result: "" };
 
       // when the percentage operator is tapped on the screen
       case "percentage":
-         // return the state with a result multiplied by 0.01
-         return { ...state, result: state.result * 0.01 };
+         let previousState = state.result;
+         previousState = Number.parseFloat(previousState);
+         previousState = previousState * 0.01;
+
+         // return the state
+         return { ...state, result: previousState.toString() };
 
       // when the +/- operator is tapped on the screen
       case "change sign":
+         let previousResult = state.result;
+         previousResult = Number.parseFloat(previousResult);
+         previousResult = previousResult * -1;
+
          // return state with -1 multiplied to the result
-         return { ...state, result: state.result * -1 };
+         return { ...state, result: previousResult.toString() };
+
+      case ". tapped":
+         return { ...state, result: state.result.concat(".") };
 
       default:
          return state;
@@ -148,6 +153,10 @@ export default function App() {
       if (value === "+/-") {
          dispatch({ type: "change sign" });
       }
+      // check if . was tapped on
+      if (value === ".") {
+         dispatch({ type: ". tapped" });
+      }
    };
 
    return (
@@ -155,7 +164,7 @@ export default function App() {
          <StatusBar style="light" />
 
          {/* text to display the result / answer */}
-         <Text style={styles.result}>{result}</Text>
+         <Text style={styles.result}>{result == "" ? 0 : result}</Text>
 
          {/* create a rows of buttons below results */}
          <Row
