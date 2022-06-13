@@ -1,16 +1,8 @@
 import { useState, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
-import {
-   Dimensions,
-   SafeAreaView,
-   TouchableOpacity,
-   StyleSheet,
-   Text,
-   View,
-} from "react-native";
+import { SafeAreaView, StyleSheet, Text } from "react-native";
 
-const buttonWidth = Dimensions.get("window").width / 5;
-const buttonHeight = Dimensions.get("window").height / 11;
+import Row from "./Row";
 
 export default function App() {
    const [answerValue, setAnswerValue] = useState(0);
@@ -106,7 +98,7 @@ export default function App() {
          {/* text to display the result */}
          <Text style={styles.result}>{answerValue}</Text>
          {/* create a row of buttons below results */}
-         <View style={styles.row}>
+         {/* <View style={styles.row}>
             <Button color="grey" value="C" onPress={onButtonPress} />
             <Button color="grey" value="+/-" onPress={onButtonPress} />
             <Button color="grey" value="%" onPress={onButtonPress} />
@@ -139,27 +131,52 @@ export default function App() {
             />
             <Button color="black" value="." onPress={onButtonPress} />
             <Button color="blue" value="=" onPress={onButtonPress} />
-         </View>
+         </View> */}
+         <Row
+            buttonPressed={onButtonPress}
+            buttons={[
+               { value: "C", color: "grey" },
+               { value: "+/-", color: "grey" },
+               { value: "%", color: "grey" },
+               { value: "/", color: "blue" },
+            ]}
+         />
+         <Row
+            buttonPressed={onButtonPress}
+            buttons={[
+               { color: "black", value: 7 },
+               { color: "black", value: 8 },
+               { color: "black", value: 9 },
+               { color: "blue", value: "X" },
+            ]}
+         />
+         <Row
+            buttonPressed={onButtonPress}
+            buttons={[
+               { color: "black", value: 4 },
+               { color: "black", value: 5 },
+               { color: "black", value: 6 },
+               { color: "blue", value: "-" },
+            ]}
+         />
+         <Row
+            buttonPressed={onButtonPress}
+            buttons={[
+               { color: "black", value: 1 },
+               { color: "black", value: 2 },
+               { color: "black", value: 3 },
+               { color: "blue", value: "+" },
+            ]}
+         />
+         <Row
+            buttonPressed={onButtonPress}
+            buttons={[
+               { color: "black", value: 0, size: "double" },
+               { color: "black", value: "." },
+               { color: "blue", value: "=" },
+            ]}
+         />
       </SafeAreaView>
-   );
-}
-
-/**
- *
- */
-function Button({ value, color, size, onPress }) {
-   return (
-      <TouchableOpacity
-         onPress={() => onPress(value)}
-         style={[
-            styles.button,
-            color === "blue" ? styles.blueButton : "",
-            color === "grey" ? styles.greyButton : "",
-            size === "double" ? styles.doubleSize : "",
-         ]}
-      >
-         <Text style={styles.buttonText}>{value}</Text>
-      </TouchableOpacity>
    );
 }
 
@@ -175,32 +192,5 @@ const styles = StyleSheet.create({
       margin: 5,
       marginRight: 30,
       textAlign: "right",
-   },
-   row: {
-      display: "flex",
-      flexDirection: "row",
-   },
-   button: {
-      width: buttonWidth,
-      height: buttonHeight,
-      borderRadius: 50,
-      backgroundColor: "#333",
-      margin: 10,
-      display: "flex",
-      justifyContent: "center",
-   },
-   buttonText: {
-      color: "white",
-      fontSize: 32,
-      textAlign: "center",
-   },
-   blueButton: {
-      backgroundColor: "#0984E3",
-   },
-   greyButton: {
-      backgroundColor: "#A6A6A6",
-   },
-   doubleSize: {
-      width: buttonWidth * 2.22,
    },
 });
