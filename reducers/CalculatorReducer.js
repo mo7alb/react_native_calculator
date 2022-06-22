@@ -1,3 +1,5 @@
+import { ReloadInstructions } from "react-native/Libraries/NewAppScreen";
+
 /**
  * A function that performs arithmetic operations based on the buttons clicked
  * @param {Number} firstValue the first value on which the operation is to be applied
@@ -14,6 +16,9 @@ const calculate = (firstValue, secondValue, operator) => {
       case "X":
          return firstValue * secondValue;
       case "/":
+         if (secondValue == 0) {
+            return "Error: cannot divide by 0";
+         }
          return firstValue / secondValue;
       default:
          throw Error("Invalid operation");
