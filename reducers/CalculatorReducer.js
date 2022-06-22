@@ -113,10 +113,14 @@ export const reducer = (state, action) => {
       case "change sign":
          let previousResult = state.result;
          previousResult = Number.parseFloat(previousResult);
-         previousResult = previousResult * -1;
+         let changedSignVal = previousResult * -1;
 
          // return state with -1 multiplied to the result
-         return { ...state, result: previousResult.toString() };
+         return {
+            ...state,
+            result: changedSignVal.toString(),
+            memory: `${previousResult} +/- =`,
+         };
 
       case ". tapped":
          return { ...state, result: state.result.concat(".") };
