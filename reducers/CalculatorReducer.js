@@ -100,10 +100,14 @@ export const reducer = (state, action) => {
       case "percentage":
          let previousState = state.result;
          previousState = Number.parseFloat(previousState);
-         previousState = previousState * 0.01;
+         let newVal = previousState * 0.01;
 
          // return the state
-         return { ...state, result: previousState.toString() };
+         return {
+            ...state,
+            result: newVal.toString(),
+            memory: `${previousState} % =`,
+         };
 
       // when the +/- operator is tapped on the screen
       case "change sign":

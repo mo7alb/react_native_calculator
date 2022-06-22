@@ -34,7 +34,7 @@ export default function App() {
          <StatusBar style="light" />
 
          {/* Display the whole operation above */}
-         <Text style={styles.indicator}>{memory !== "" ? memory : ""}</Text>
+         <Text style={styles.previous}>{memory !== "" ? memory : ""}</Text>
 
          {/* text to display the result / answer */}
          <Text style={styles.result}>{result == "" ? 0 : result}</Text>
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
       marginRight: 30,
       textAlign: "right",
    },
-   indicator: {
+   previous: {
       color: "#fff",
       textAlign: "right",
       fontSize: 35,
