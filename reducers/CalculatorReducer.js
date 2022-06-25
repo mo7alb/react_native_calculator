@@ -1,4 +1,4 @@
-import { ReloadInstructions } from "react-native/Libraries/NewAppScreen";
+import { Alert } from "react-native";
 
 /**
  * A function that performs arithmetic operations based on the buttons clicked
@@ -9,15 +9,21 @@ import { ReloadInstructions } from "react-native/Libraries/NewAppScreen";
  */
 const calculate = (firstValue, secondValue, operator) => {
    switch (operator) {
+      // case when the operator is a plus
       case "+":
          return firstValue + secondValue;
+      // case when the operator is a minus
       case "-":
          return firstValue - secondValue;
+      // case when the operator is a multiplication
       case "X":
          return firstValue * secondValue;
+      // case when the operator is a divider
       case "/":
+         // check if dividing by 0
          if (secondValue == 0) {
-            return "Error: cannot divide by 0";
+            // return error
+            return "Cannot divide by 0";
          }
          return firstValue / secondValue;
       default:
@@ -40,6 +46,21 @@ export const reducer = (state, action) => {
             state = { ...state, result: "" };
          }
 
+         // check if memory contains previous calculations results but does
+         // not have a operator
+         if (state.readyToSwap && state.operator == null) {
+            // clear the memory
+            state = { ...state, memory: "" };
+         }
+
+         if (state.result !== "" && state.result.length > 6) {
+            Alert.alert(
+               "Number too long",
+               "Number cannot be longer than 7 digits"
+            );
+            return state;
+         }
+
          // the number tapped on the screen
          let num = action.payload;
 
@@ -49,34 +70,56 @@ export const reducer = (state, action) => {
             ...state,
             result: state.result.concat(num),
             readyToSwap: false,
+            showC: true,
          };
 
       // when C is tapped on the screen
-      case "clear":
+      case "clear number":
+         // reset the result value
+         return {
+            ...state,
+            result: "",
+            showC: false,
+         };
+
+      // when AC is tapped on the screen
+      case "clear all":
          // reset all values
          return {
             result: "",
             operator: null,
             firstValue: 0,
             secondValue: 0,
-            memory: 0,
+            memory: "",
             readyToSwap: true,
+            showC: false,
          };
 
       // when = is tapped on the screen
       case "equals":
+         if (state.operator == null || state.memory.endsWith("=")) {
+            return state;
+         }
+
          // calculate the result of the operation
          let result = calculate(
             Number.parseFloat(state.firstValue),
             Number.parseFloat(state.result),
             state.operator
          );
+
+         // restrict the result floating point number to have
+         // 7 decimal digits
+         result = result.toFixed(7);
+
          // return new state
          return {
             ...state,
             memory: `${state.memory} ${state.result} = `,
             result: result.toString(),
+            operator: null,
             readyToSwap: true,
+            showC: false,
          };
 
       // when an operator is tapped on the screen
@@ -99,6 +142,7 @@ export const reducer = (state, action) => {
             memory: `${firstValue} ${operator}`,
             result: "",
             readyToSwap: true,
+            showC: false,
          };
 
       // when the percentage operator is tapped on the screen
@@ -112,6 +156,7 @@ export const reducer = (state, action) => {
             ...state,
             result: newVal.toString(),
             memory: `${previousState} % =`,
+            showC: false,
          };
 
       // when the +/- operator is tapped on the screen
@@ -125,11 +170,25 @@ export const reducer = (state, action) => {
             ...state,
             result: changedSignVal.toString(),
             memory: `${previousResult} +/- =`,
+            showC: false,
          };
 
+      // when . is tapped
       case ". tapped":
+         if (state.result.includes(".")) {
+            return state;
+         }
+
+         if (state.result == "") {
+            return {
+               ...state,
+               result: "0.",
+            };
+         }
+
          return { ...state, result: state.result.concat(".") };
 
+      // return the sate for everything else
       default:
          return state;
    }

@@ -1,7 +1,7 @@
 import React from "react";
 import Row from "./Row";
 
-export default function Buttons({ dispatch }) {
+export default function Buttons({ c, dispatch }) {
    /**
     * function that handles taps on TouchableOpacity by maping
     * different types of button taps to different dispatches
@@ -15,7 +15,7 @@ export default function Buttons({ dispatch }) {
       }
       // check if C was tapped on screen was tapped on the screen
       if (value === "C") {
-         dispatch({ type: "clear" });
+         dispatch({ type: "clear number" });
       }
       // check if equal sign was tapped
       if (value === "=") {
@@ -37,20 +37,27 @@ export default function Buttons({ dispatch }) {
       if (value === ".") {
          dispatch({ type: ". tapped" });
       }
+      // check if AC was tapped on
+      if (value === "AC") {
+         dispatch({ type: "clear all" });
+      }
    };
 
    return (
       <React.Fragment>
-         {/* create a rows of buttons below results */}
+         {/* a rows of buttons below results */}
          <Row
             buttonPressed={onButtonPress}
             buttons={[
-               { value: "C", color: "grey" },
+               c == true
+                  ? { value: "C", color: "grey" }
+                  : { value: "AC", color: "grey" },
                { value: "+/-", color: "grey" },
                { value: "%", color: "grey" },
                { value: "/", color: "blue" },
             ]}
          />
+         {/* a rows of buttons */}
          <Row
             buttonPressed={onButtonPress}
             buttons={[
@@ -60,6 +67,7 @@ export default function Buttons({ dispatch }) {
                { color: "blue", value: "X" },
             ]}
          />
+         {/* a rows of buttons below results */}
          <Row
             buttonPressed={onButtonPress}
             buttons={[
@@ -69,6 +77,7 @@ export default function Buttons({ dispatch }) {
                { color: "blue", value: "-" },
             ]}
          />
+         {/* a rows of buttons below results */}
          <Row
             buttonPressed={onButtonPress}
             buttons={[
@@ -78,6 +87,7 @@ export default function Buttons({ dispatch }) {
                { color: "blue", value: "+" },
             ]}
          />
+         {/* a rows of buttons below results */}
          <Row
             buttonPressed={onButtonPress}
             buttons={[

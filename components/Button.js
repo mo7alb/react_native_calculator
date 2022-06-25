@@ -14,6 +14,7 @@ const buttonHeight = Dimensions.get("window").height / 11;
  */
 export default function Button({ value, color, size, onPress }) {
    return (
+      // return a touchable opacity with the button styles and properties
       <TouchableOpacity
          onPress={() => onPress(value)}
          style={[

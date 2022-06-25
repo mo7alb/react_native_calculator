@@ -1,12 +1,9 @@
+// import hooks and components
 import { useReducer } from "react";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView, StyleSheet, Text } from "react-native";
 import { reducer } from "./reducers/CalculatorReducer";
-
 import Buttons from "./components/Buttons";
-
-// AC => all clear => clears everythin
-// C => clear => clears the number
 
 // initial state of the component
 const initialState = {
@@ -16,6 +13,7 @@ const initialState = {
    secondValue: 0,
    memory: "",
    readyToSwap: true,
+   showC: false,
 };
 
 /**
@@ -30,6 +28,7 @@ export default function App() {
    const { result, memory } = state;
 
    return (
+      // push the content of the calculator to a safe area
       <SafeAreaView style={styles.container}>
          <StatusBar style="light" />
 
@@ -39,7 +38,8 @@ export default function App() {
          {/* text to display the result / answer */}
          <Text style={styles.result}>{result == "" ? 0 : result}</Text>
 
-         <Buttons dispatch={dispatch} />
+         {/* display all the numbers and signs */}
+         <Buttons c={state.showC} dispatch={dispatch} />
       </SafeAreaView>
    );
 }
