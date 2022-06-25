@@ -89,7 +89,6 @@ export const reducer = (state, action) => {
             result: "",
             operator: null,
             firstValue: 0,
-            secondValue: 0,
             memory: "",
             readyToSwap: true,
             showC: false,
@@ -110,7 +109,7 @@ export const reducer = (state, action) => {
 
          // restrict the result floating point number to have
          // 7 decimal digits
-         result = result.toFixed(7);
+         result = Math.round(result * 100000) / 100000;
 
          // return new state
          return {

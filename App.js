@@ -10,7 +10,6 @@ const initialState = {
    result: "",
    operator: null,
    firstValue: 0,
-   secondValue: 0,
    memory: "",
    readyToSwap: true,
    showC: false,
